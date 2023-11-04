@@ -51,8 +51,8 @@ UserSchema.methods.createJWT = function(uuid: string): string {
         process.env.JWT_SECRET,
         {
             expiresIn: process.env.JWT_EXPIRES,
-                    issuer: process.env.JWT_ISSUER,
-                    jwtid: uuid,
+            issuer: process.env.JWT_ISSUER,
+            jwtid: uuid,
         }
      );
      return token;
@@ -65,8 +65,8 @@ UserSchema.methods.createRefresh = function(uuid: string): string {
         process.env.REFRESH_SECRET,
         {
             expiresIn: process.env.REFRESH_EXPIRES,
-                    issuer: process.env.JWT_ISSUER,
-                    jwtid: uuid,
+            issuer: process.env.JWT_ISSUER,
+            jwtid: uuid,
         }
      );
      return refreshToken;
