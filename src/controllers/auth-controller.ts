@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 
-import { Body, Controller, OperationId, Post, Route, Tags } from "tsoa";
+import { Body, Controller, OperationId, Post, Route, Tags, Security } from "tsoa";
 
 import {
   UserAndCredentials,
@@ -19,5 +19,17 @@ export class AuthController extends Controller {
   ): Promise<UserAndCredentials> {
     this.setStatus(StatusCodes.CREATED);
     return new AuthService().register(requestBody);
+  }
+
+
+  // TODO: remove this dummy endpoint later when
+  // we have proper endpoints that use our
+  // authentication mechanism
+  @Post("dummy")
+  @OperationId("dummy")
+  @Security("jwt")
+  public async dummy(): Promise<void> {
+    this.setStatus(StatusCodes.OK);
+    return Promise.resolve();
   }
 }

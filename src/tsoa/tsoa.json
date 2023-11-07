@@ -127,6 +127,25 @@
 					}
 				}
 			}
+		},
+		"/api/v1/auth/dummy": {
+			"post": {
+				"operationId": "dummy",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"tags": [
+					"Auth"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": []
+			}
 		}
 	},
 	"servers": [
