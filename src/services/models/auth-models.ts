@@ -17,3 +17,8 @@ export interface UserAndCredentials {
     token: string;
     refresh: string;
   }
+ 
+export interface LoginParams{
+  email: string;
+  password: string;
+}

@@ -3,6 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import { Body, Controller, OperationId, Post, Route, Tags, Security } from "tsoa";
 
 import {
+  LoginParams,
   UserAndCredentials,
   UserCreationParams,
 } from "../services/models/auth-models";
@@ -31,5 +32,14 @@ export class AuthController extends Controller {
   public async dummy(): Promise<void> {
     this.setStatus(StatusCodes.OK);
     return Promise.resolve();
+  }
+
+  @Post("login")
+  @OperationId("loginUser")
+  public async login(
+    @Body() requestBody: LoginParams
+  ): Promise<UserAndCredentials>{
+    this.setStatus(StatusCodes.OK);
+    return new AuthService().login(requestBody);
   }
 }
