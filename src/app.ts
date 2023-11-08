@@ -8,13 +8,13 @@ import { connectToDatabase } from "./db/connect";
 import * as swaggerUI from "swagger-ui-express";
 import * as swaggerJson from "./tsoa/tsoa.json"
 import { RegisterRoutes } from "./routes/routes";
-
+import { errorHandlerMiddleware } from "./middleware/error-handler";
 
 const app = express();
 
-
 app.use(urlencoded({ extended: true }));
 app.use(json());
+
 
 
 // serve Swagger UI
@@ -36,6 +36,7 @@ app.get("/swagger.json", (_, res) => {
 
 const port = process.env.PORT || 3000;
 RegisterRoutes(app);
+app.use(errorHandlerMiddleware);
 const start = async () => {
     try {
         const mongoUri = process.env.MONGO_URI;
