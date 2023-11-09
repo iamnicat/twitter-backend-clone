@@ -194,6 +194,25 @@
 					}
 				}
 			}
+		},
+		"/api/v1/auth": {
+			"delete": {
+				"operationId": "logoutUser",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"tags": [
+					"Auth"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": []
+			}
 		}
 	},
 	"servers": [
