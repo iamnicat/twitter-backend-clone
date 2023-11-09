@@ -42,8 +42,11 @@ export async function expressAuthentication(
   }
 }
 
-async function jwtAuth(token: string, ignoreExpiration: boolean = false): Promise<AuthenticatedUser> {
-  const decoded = jwt.verify(token, process.env.JWT_SECRET,{
+async function jwtAuth(
+  token: string,
+  ignoreExpiration: boolean = false
+): Promise<AuthenticatedUser> {
+  const decoded = jwt.verify(token, process.env.JWT_SECRET, {
     ignoreExpiration: ignoreExpiration,
   }) as {
     userId: string;

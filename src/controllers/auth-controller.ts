@@ -6,10 +6,12 @@ import {
   LoginParams,
   UserAndCredentials,
   UserCreationParams,
+  RefreshParams,
 } from "../services/models/auth-models";
 
 import AuthService from "../services/auth-service";
 import { Request as ExpressRequest } from "express";
+import AuthenticatedUser from "src/middleware/models/authenticated-user";
 @Route("/api/v1/auth")
 @Tags("Auth")
 export class AuthController extends Controller {
@@ -53,4 +55,21 @@ export class AuthController extends Controller {
     const user = request.user as { jti: string };
     await new AuthService().logout(user.jti);
   }
+
+
+  @Post("refresh")
+  @Security("jwt_without_verification")
+  @OperationId("refreshUser")
+  public async refresh(
+    @Request() request: ExpressRequest,
+    @Body() requestBody: RefreshParams
+  ): Promise<UserAndCredentials> {
+    this.setStatus(StatusCodes.OK);
+    const user = request.user as AuthenticatedUser;
+    return new AuthService().refresh(requestBody, user);
+  }
+
 }
+
+
+
