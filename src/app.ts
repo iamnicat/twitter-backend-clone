@@ -9,6 +9,7 @@ import * as swaggerUI from "swagger-ui-express";
 import * as swaggerJson from "./tsoa/tsoa.json"
 import { RegisterRoutes } from "./routes/routes";
 import { errorHandlerMiddleware } from "./middleware/error-handler";
+import fileUpload from "express-fileupload";
 
 const app = express();
 
@@ -32,8 +33,17 @@ app.get("/swagger.json", (_, res) => {
     res.setHeader("Content-Type", "application/json");
     res.sendFile(__dirname + "/tsoa/tsoa.json");
   });
-   
 
+ 
+ // middleware for file uploading
+   
+app.use(
+    fileUpload({
+      useTempFiles: true,
+      tempFileDir: "/tmp/",
+    })
+  );
+  
 const port = process.env.PORT || 3000;
 RegisterRoutes(app);
 app.use(errorHandlerMiddleware);

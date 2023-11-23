@@ -14,7 +14,11 @@ import {
 } from "tsoa";
 import { Profile } from "../services/models/profile-models";
 import ProfileService from "../services/profile-service";
-import { Request as ExpressRequest } from "express";
+import {  
+  Request as ExpressRequest,
+  Response as ExpressResponse,
+} from "express";
+import { NoPhotoUploadedError } from "../errors";
 
 @Route("/api/v1/profile")
 @Tags("Profile")
@@ -42,5 +46,49 @@ export class ProfileController extends Controller {
     const user = request.user as { id: string};
     return new ProfileService().set(user.id, requestBody);
   }
+
+
+  @Post("photo")
+  @OperationId("setProfilePhoto")
+  @Security("jwt")
+  @Response(StatusCodes.OK)
+  @Response(StatusCodes.BAD_REQUEST, "No photo uploaded")
+  @Response(StatusCodes.BAD_REQUEST, "Invalid mime type")
+  public async setProfilePhoto(
+    @Request() request: ExpressRequest
+  ): Promise<void> {
+    if (!request.files || Object.keys(request.files).length === 0) {
+      throw new NoPhotoUploadedError();
+    }
+    this.setStatus(StatusCodes.OK);
+    const user = request.user as { id: string };
+    return new ProfileService().setPhoto(user.id, request as any);
+  }
+
+
+  @Response(StatusCodes.OK)
+  @Response(StatusCodes.NOT_FOUND, "Photo not found")
+  @Get("photo/{userId}")
+  @OperationId("getProfilePhoto")
+  @Security("jwt")
+   public async getProfilePhoto(
+    @Path() userId: string,
+    @Request() request: ExpressRequest
+   ) : Promise<void>{
+    const photoInfo = await new ProfileService().getPhoto(userId);
+    const response = request.res as ExpressResponse;
+    return new Promise<void>( (resolve, reject) => {
+     response.sendFile(photoInfo.photoName, photoInfo.options, (err)=> {
+        
+      if(err){
+        reject(err);
+      }else{
+        resolve();
+      }
+     
+     });
+    });
+
+   }
 
 }

@@ -351,6 +351,65 @@
 					}
 				}
 			}
+		},
+		"/api/v1/profile/photo": {
+			"post": {
+				"operationId": "setProfilePhoto",
+				"responses": {
+					"200": {
+						"description": ""
+					},
+					"204": {
+						"description": "No content"
+					},
+					"400": {
+						"description": "Invalid mime type"
+					}
+				},
+				"tags": [
+					"Profile"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/api/v1/profile/photo/{userId}": {
+			"get": {
+				"operationId": "getProfilePhoto",
+				"responses": {
+					"200": {
+						"description": ""
+					},
+					"204": {
+						"description": "No content"
+					},
+					"404": {
+						"description": "Photo not found"
+					}
+				},
+				"tags": [
+					"Profile"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
 		}
 	},
 	"servers": [
