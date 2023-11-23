@@ -4,7 +4,7 @@ import {
     ProfilePhotoInfo 
        } from "./models/profile-models";
 import { UploadedFile } from "express-fileupload";
-import { mkdir, stat } from "node:fs/promises";
+import { mkdir, stat, unlink } from "node:fs/promises";
 import {
   getProfilePhotosRootDir,
   getUserIdProfilePhotoPath,
@@ -107,6 +107,20 @@ export default class ProfileService{
 
 
         
+    }
+
+
+    public async deletePhoto (userId: string) : Promise<void>{
+
+    const photoPath = getUserIdProfilePhotoPath(userId);
+
+
+     try {
+        await unlink(photoPath);
+     } catch  {
+        throw new PhotoNotFoundError();
+     }
+
     }
 
 

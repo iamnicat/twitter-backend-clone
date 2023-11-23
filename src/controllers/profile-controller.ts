@@ -6,6 +6,7 @@ import {
   OperationId,
   Path,
   Post,
+  Delete,
   Request,
   Response,
   Route,
@@ -91,4 +92,17 @@ export class ProfileController extends Controller {
 
    }
 
+   @Delete("photo")
+   @Security('jwt')
+   @OperationId('deleteProfilePhoto')
+   @Response(StatusCodes.OK)
+   @Response(StatusCodes.NOT_FOUND, "Photo not found")
+   public async deletePhoto (
+    @Request() request: ExpressRequest
+   ) : Promise<void>{
+
+    const user = request.user as { id: string};
+    this.setStatus(StatusCodes.OK);
+    return  new ProfileService().deletePhoto(user.id);
+   }
 }
