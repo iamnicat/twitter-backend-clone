@@ -106,6 +106,70 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"PostType": {
+				"enum": [
+					"post",
+					"repost",
+					"reply"
+				],
+				"type": "string"
+			},
+			"PostModel": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"userId": {
+						"type": "string"
+					},
+					"text": {
+						"type": "string"
+					},
+					"type": {
+						"$ref": "#/components/schemas/PostType"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"attachmentId": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"userId",
+					"text",
+					"type",
+					"createdAt",
+					"updatedAt"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreatePostParams": {
+				"properties": {
+					"text": {
+						"type": "string"
+					},
+					"type": {
+						"$ref": "#/components/schemas/PostType"
+					},
+					"originalPostId": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"text",
+					"type"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"Profile": {
 				"properties": {
 					"bio": {
@@ -275,6 +339,49 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/RefreshParams"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/posts": {
+			"post": {
+				"operationId": "createPost",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PostModel"
+								}
+							}
+						}
+					},
+					"201": {
+						"description": ""
+					},
+					"400": {
+						"description": "Original post ID is missing"
+					}
+				},
+				"description": "Creates a new post, allows you to reply to an existing post or simply repost the original post.\nFor replies and reposts, the original post ID must be specified.\nFor a new post, the original post ID will be ignored.",
+				"tags": [
+					"Posts"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreatePostParams"
 							}
 						}
 					}

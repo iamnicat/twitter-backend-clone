@@ -6,3 +6,5 @@ export { UserProfileNotFoundError } from "./user-profile-not-found-error";
 export { InvalidMimeTypeError } from "./invalid-mimetype-error";
 export { NoPhotoUploadedError } from "./no-photo-uploaded-error";
 export { PhotoNotFoundError } from "./photo-not-found-error";
+export { OriginalPostIdMissingError } from "./original-post-id-missing-error";
+export { InvalidInputError } from "./invalid-input-error";
