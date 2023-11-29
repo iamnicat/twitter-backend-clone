@@ -1,15 +1,21 @@
 
 import Post from "../db/models/post";
 
+import  Reaction  from "../db/models/reaction"
+
 import {
     InvalidInputError,
-    OriginalPostIdMissingError
+    OriginalPostIdMissingError,
+    PostNotFoundError,
+    ReactionNotFoundError,
 } from "../errors";
 
 import {
     CreatePostParams,
     PostType,
-    Post as TSOAPostModel
+    CreateReactionParams,
+    Post as TSOAPostModel,
+    Reaction as TSOAReactionModel
 } from "./models/posts-models";
 
 
@@ -52,6 +58,47 @@ export default  class PostService {
 
     }
 
+  
+    public async reactToPost(
+        userId: String,
+        postId: String,
+        params: CreateReactionParams
+      ): Promise<TSOAReactionModel> {
+        const post = await Post.findById(postId);
+    
+        if (!post) {
+          throw new PostNotFoundError();
+        }
+    
+        const query = { userId, postId };
+    
+        const reaction = await Reaction.findOneAndUpdate(
+          query,
+          {
+            userId,
+            postId,
+            type: params.type,
+          },
+          { upsert: true, new: true }
+        );
+    
+        return reaction.toJSON() as TSOAReactionModel;
+      }
 
+
+     public async unreactToPost(
+        userId: string,
+        postId: string
+     ): Promise<TSOAReactionModel>{
+          
+        const reaction = await Reaction.findOneAndDelete({ userId, postId });
+
+
+      if (!reaction) {
+        throw new ReactionNotFoundError();
+      }
+
+        return reaction?.toJSON() as TSOAReactionModel;
+     }
 
 }
