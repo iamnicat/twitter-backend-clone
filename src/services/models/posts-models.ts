@@ -34,6 +34,18 @@ export interface Reaction{
   type: ReactionType;
 }
 
-export  interface CreateReactionParams{
+export interface CreateReactionParams{
   type: ReactionType;
+}
+
+export interface Attachment{
+  id: string;
+  mimeType: string;
+}
+
+
+
+export interface PostAttachmentInfo {
+  photoName: string;
+  options: any;
 }
